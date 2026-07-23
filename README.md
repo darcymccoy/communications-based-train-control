@@ -1,4 +1,4 @@
-# Communications-Based Train Control Demo
+# [Communications-Based Train Control Demo](https://darcymccoy.github.io/communications-based-train-control/)
 
 An interactive, browser-based visualisation of CBTC moving block. Unlike my other personal projects, I experimented with taking an extremely hands off approach and let Claude write all the code in this project.
 
