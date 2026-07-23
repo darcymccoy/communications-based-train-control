@@ -42,13 +42,13 @@ export class ControlPanel {
   private buildHeader(): HTMLElement {
     const h = el('header', 'panel-header');
     h.append(
-      el('h1', '', 'CBTC — Moving Block'),
+      el('h1', '', 'CBTC Moving Block'),
       el(
         'p',
         'subtitle',
         'Every train radios its position to the wayside controller, which grants ' +
           'it permission to move. Each train reserves exactly the track it needs ' +
-          'to stop — no more, no less.',
+          'to stop.',
       ),
     );
     return h;
