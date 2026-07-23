@@ -238,7 +238,7 @@ export class Renderer {
 
     // Name plate, sitting just beyond the platform.
     const c = outward(st.at, gap + PLATFORM_WIDTH / 2 + 12);
-    this.label(st.name, c.x, c.y + 4, '#cbd5e1', 12);
+    this.label(st.name, c.x, c.y + 4 + (st.labelDy ?? 0), '#cbd5e1', 12);
   }
 
   private label(text: string, x: number, y: number, color: string, size: number): void {

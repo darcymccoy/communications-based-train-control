@@ -21,6 +21,12 @@ export interface Station {
   at: number;
   /** Platform length (m). */
   length: number;
+  /**
+   * Optional nudge (screen px) for the name plate. Stations on a curve have
+   * their label pushed outward horizontally, so a wide name can overlap the
+   * vertically-running platform; a small upward nudge lifts it clear.
+   */
+  labelDy?: number;
 }
 
 /**
@@ -30,7 +36,7 @@ export interface Station {
  */
 export const STATIONS: Station[] = [
   { name: 'Central', at: 186, length: 90 },
-  { name: 'Angrignon', at: 686, length: 90 },
+  { name: 'Berri-UQAM', at: 686, length: 90, labelDy: -80 },
   { name: 'Beaudry', at: 1186, length: 90 },
 ];
 

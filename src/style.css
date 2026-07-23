@@ -401,3 +401,32 @@ body {
   line-height: 1.45;
   color: var(--muted);
 }
+
+/* ------------------------------------------------------------------ mobile */
+
+/*
+ * On narrow screens the side-by-side layout leaves the oval track too cramped
+ * to read. Stack instead: demo on top, menu below. #stage already precedes
+ * #panel in the DOM, so flipping the flex axis puts them in that order for
+ * free. The canvas refits on the resize event this breakpoint change triggers.
+ */
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+
+  #stage {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  #panel {
+    width: 100%;
+    height: auto;
+    flex: 0 1 auto;
+    max-height: 55vh;
+    padding: 16px;
+    border-left: none;
+    border-top: 1px solid var(--line);
+  }
+}
