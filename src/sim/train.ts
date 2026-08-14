@@ -137,9 +137,33 @@ export class Train {
     // Classify for the UI. The order matters: we want the *tightest* live
     // constraint to name the mode, so a station stop is only reported when the
     // station is actually holding us back harder than the train ahead is.
-    const held = this.speed > target - 0.01; // at (or braking down to) the cap
+    //
+    // "At the cap" needs a tolerance rather than an exact comparison. The
+    // wayside refreshes an authority only once per comms interval, so the
+    // permitted speed arrives as a staircase: each update nudges the cap and
+    // the train spends the next few physics steps accelerating onto it. Judged
+    // exactly, a train following another at a settled distance would fall out
+    // of `held` for two or three steps after every single update, and the
+    // reported mode would flicker between braking and cruising at the comms
+    // rate. So the tolerance is one comms cycle of acceleration — the most a
+    // train can legitimately trail a freshly-raised cap by — and it widens once
+    // we have already called the train held, so the label doesn't chatter while
+    // the deviation sits on the boundary.
+    const catchUp = p.accel * p.commsInterval;
+    const wasHeld = this.mode === 'braking' || this.mode === 'station';
+    const held = this.speed > target - (wasHeld ? 2 * catchUp : catchUp);
+    // Which constraint is tighter gets the same treatment, and for the same
+    // reason: as a train brakes into a platform behind another train the two
+    // caps cross, and comparing a staircase against a smooth curve makes the
+    // label swap back and forth across the handover. Claiming the station only
+    // once it is clearly the tighter cap, and holding that claim until the
+    // train ahead is clearly tighter, makes the handover happen once.
+    const stationTighter =
+      this.mode === 'station'
+        ? stationCap < waysideTarget + catchUp
+        : stationCap < waysideTarget - catchUp;
     const stationLimiting =
-      !failsafe && held && stationCap < waysideTarget - 0.01 && stationCap < this.maxSpeed - 0.01;
+      !failsafe && held && stationTighter && stationCap < this.maxSpeed - 0.01;
 
     if (failsafe) {
       this.mode = this.speed > 0.05 ? 'failsafe' : 'stopped';
